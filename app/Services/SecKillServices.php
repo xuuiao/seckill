@@ -308,7 +308,7 @@ class SecKillServices
             usleep(2000);
             if ($limit) {
                 $loopTimes++;
-                if ($loopTimes >= 1) {
+                if ($loopTimes >= 3) {
                     break;
                 }
                 Log::notice("looooooooooop");
