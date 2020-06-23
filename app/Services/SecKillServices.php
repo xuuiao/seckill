@@ -308,7 +308,7 @@ class SecKillServices
             Log::debug('哎呀，我等了。。。');
             if ($limit) {
                 $loopTimes++;
-                if ($loopTimes >= 10) {
+                if ($loopTimes >= 1) {
                     break;
                 }
             }

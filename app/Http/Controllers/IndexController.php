@@ -55,7 +55,8 @@ class IndexController extends Controller
      * @author XuHuitao
      */
     public function seckill(Request $request) {
-        $userId = (int)$request->get('user_id', 0);
+        //$userId = (int)$request->get('user_id', 0);
+        $userId = rand(16,215);
         $activityId = (int)$request->get('activity_id', 0);
         if ($userId <= 0) {
             return error(610001);
@@ -82,16 +83,16 @@ class IndexController extends Controller
      * @author XuHuitao
      */
     public function initcache(Request $request) {
-    $activityId = (int)$request->get('activity_id', 0);
-    if ($activityId <= 0) {
+        $activityId = (int)$request->get('activity_id', 0);
+        if ($activityId <= 0) {
+            return error(610002);
+        }
+        $secKillObj = new SecKillServices();
+        if ($secKillObj->initActivityCache($activityId)) {
+            return success();
+        }
         return error(610002);
     }
-    $secKillObj = new SecKillServices();
-    if ($secKillObj->initActivityCache($activityId)) {
-        return success();
-    }
-    return error(610002);
-}
 
     public function test() {
 
