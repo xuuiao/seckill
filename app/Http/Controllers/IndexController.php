@@ -56,7 +56,7 @@ class IndexController extends Controller
      */
     public function seckill(Request $request) {
         //$userId = (int)$request->get('user_id', 0);
-        $userId = rand(16,215);
+        $userId = rand(1,99999999);
         $activityId = (int)$request->get('activity_id', 0);
         if ($userId <= 0) {
             return error(610001);

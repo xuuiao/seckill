@@ -157,11 +157,12 @@ class SecKillServices
             'code' => 610003,
         ];
         // 检查用户信息
-        $userInfo = User::getUserInfo($userId);
-        if (empty($userInfo)) {
+        //$userInfo = User::getUserInfo($userId);
+        /*if (empty($userInfo)) {
             $result['msg'] = '用户信息不存在';
             return $result;
         }
+        */
         // 获取用户请求锁
         if (!$this->lockUserRequest($userId, $activityId)) {
             return $this->secKillFailed($userId, $activityId, '重复请求');
