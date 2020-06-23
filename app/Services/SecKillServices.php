@@ -274,7 +274,7 @@ class SecKillServices
         $this->redis->set($key, json_encode($activityInfo));
         $this->unlockActivityStock($activityId);
         $endTime = microtime(true) * 1000;
-        Log::info('加锁设置库存耗时(ms):' . ($endTime - $startTime));
+        Log::info('lock to set remaining cost (ms):' . ($endTime - $startTime));
         $result['ret'] = true;
         $result['remaining_num'] = $activityInfo['remaining_num'];
         return $result;
