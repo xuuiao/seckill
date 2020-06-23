@@ -165,30 +165,30 @@ class SecKillServices
         */
         // 获取用户请求锁
         if (!$this->lockUserRequest($userId, $activityId)) {
-            return $this->secKillFailed($userId, $activityId, '重复请求');
+            return $this->secKillFailed($userId, $activityId, 'repeat request');
         }
 
         // 获取活动信息
         $activityInfo = $this->getActivityInfo($activityId);
         if (empty($activityInfo)) {
-            return $this->secKillFailed($userId, $activityId, '活动信息获取失败');
+            return $this->secKillFailed($userId, $activityId, 'get activity info failed');
         }
 
         //检查活动是否在进行中，是否还有剩余库存
         if ($activityInfo['start_time'] > time()) {
             return $this->secKillFailed($userId,
                 $activityId,
-                '当前秒杀活动还未开始, 距离开始还有' . ($activityInfo['start_time'] - time()) . '秒');
+                'seckill not start, left' . ($activityInfo['start_time'] - time()) . '秒');
         }
         if ($activityInfo['end_time'] < time()) {
-            return $this->secKillFailed($userId, $activityId, '当前秒杀活动已经结束');
+            return $this->secKillFailed($userId, $activityId, 'seckill is over');
         }
         if ($activityInfo['remaining_num'] <= 0) {
-            return $this->secKillFailed($userId, $activityId, '商品已被抢完了');
+            return $this->secKillFailed($userId, $activityId, 'product is done');
         }
         //检查用户是否已经抢购过商品
         if ($this->isUserSecKillSuccess($userId, $activityId)) {
-            return $this->secKillFailed($userId, $activityId, '不能重复购买');
+            return $this->secKillFailed($userId, $activityId, 'can not buy repeat');
         }
         //调整活动库存
         $activityStockRet = $this->setActivityStock($activityId);
@@ -207,7 +207,7 @@ class SecKillServices
             Log::error('秒杀创建订单失败, userId:' . $userId . ', activityId:' . $activityId);
             DB::rollBack();
             $this->recoverActivityStock($activityId);
-            return $this->secKillFailed($userId, $activityId, '请求异常，请重新尝试');
+            return $this->secKillFailed($userId, $activityId, 'request error');
         }
         //缓存用户购买记录数据
         $this->cacheUserActivityInfo($userId, $activityId, $activityInfo['end_time'] - time());
@@ -257,7 +257,7 @@ class SecKillServices
         // 获取活动库存锁
         $startTime = microtime(true) * 1000;
         if (!$this->lockActivityStock($activityId)) {
-            $result['msg'] = '网络拥堵，请再次尝试';
+            $result['msg'] = 'network busy, try again';
             return $result;
         }
         $key = $this->getActivityCacheKey($activityId);
@@ -265,7 +265,7 @@ class SecKillServices
         $activityInfo = json_decode($cacheValue, true);
         if ($activityInfo['remaining_num'] <= 0) {
             $this->unlockActivityStock($activityId);
-            $result['msg'] = '商品已被抢完了';
+            $result['msg'] = 'product is done';
             return $result;
         }
         $activityInfo['remaining_num'] -= 1;

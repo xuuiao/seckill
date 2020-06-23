@@ -59,15 +59,15 @@ class IndexController extends Controller
         $userId = rand(1,99999999);
         $activityId = (int)$request->get('activity_id', 0);
         if ($userId <= 0) {
-            return error(610001);
+            return error(610001, 200);
         }
         if ($activityId <= 0) {
-            return error(610002);
+            return error(610002, 200);
         }
         $secKillObj = new SecKillServices();
         $result = $secKillObj->secKill($userId, $activityId);
         if (empty($result['ret'])) {
-            return error(610003, [], 500, null, [], $result);
+            return error(610003, [], 200, null, [], $result);
         }
         return success();
 
