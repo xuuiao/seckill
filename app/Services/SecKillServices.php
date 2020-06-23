@@ -157,8 +157,8 @@ class SecKillServices
             'code' => 610003,
         ];
         // 检查用户信息
-        //$userInfo = User::getUserInfo($userId);
-        /*if (empty($userInfo)) {
+        /*$userInfo = User::getUserInfo($userId);
+        if (empty($userInfo)) {
             $result['msg'] = '用户信息不存在';
             return $result;
         }
@@ -306,12 +306,12 @@ class SecKillServices
                 break;
             }
             usleep(2000);
-            Log::debug('哎呀，我等了。。。');
             if ($limit) {
                 $loopTimes++;
                 if ($loopTimes >= 1) {
                     break;
                 }
+                Log::notice("looooooooooop");
             }
         }
         $endMS = microtime(true) * 1000;
